@@ -22,6 +22,9 @@
                     {% endfor %}
                     {% if app.user %}
                         <a class="alert-success" href="{{ path('admin_add_episode', {id: season.id}) }}">Ajouter un épisode</a>
+                        <br>
+                        <a href="{{ path('admin_delete_season', {id: season.id}) }}" class="alert-danger">Supprimer la saison</a>
+                        <br>
                     {% endif %}
                 {% else %}
                 <div class="alert alert-danger">
