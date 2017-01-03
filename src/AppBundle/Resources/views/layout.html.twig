@@ -38,10 +38,10 @@
 
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <form action="#" method="post">
+                        <form name="searchForm" action="search" method="post">
                         <div class="input-group">
-                            <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-                            <input class="form-control" />
+                            <span class="input-group-addon" onclick="searchForm.submit()"><span class="glyphicon glyphicon-search"></span></span>
+                            <input name="term" class="form-control" />
                         </div>
                         </form>
                     </li>
