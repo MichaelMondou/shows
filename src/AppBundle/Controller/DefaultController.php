@@ -22,13 +22,30 @@ class DefaultController extends Controller
      * @Route("/shows", name="shows")
      * @Template()
      */
-    public function showsAction()
+    public function showsAction(Request $request, $page = 1)
     {
-        $em = $this->get('doctrine')->getManager();
-        $repo = $em->getRepository('AppBundle:TVShow');
+        $nbPerPage = 6;
+
+        $get_page = $request->query->get('page');
+
+        $page = !empty($get_page) ? $get_page : $page;
+
+        $shows = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:TVShow')
+            ->getTvShows($page, $nbPerPage)
+        ;
+
+        $nbPages = ceil(count($shows)/$nbPerPage);
+
+        if ($page > $nbPages) {
+            throw $this->createNotFoundException("La page ".$page." n'existe pas.");
+        }
 
         return [
-            'shows' => $repo->findAll()
+            'shows' => $shows,
+            'nbPages'     => $nbPages,
+            'page'        => $page
         ];
     }
 

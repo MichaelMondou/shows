@@ -2,6 +2,8 @@
 
 namespace AppBundle\Repository;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 /**
  * TVShowRepository
  *
@@ -10,4 +12,17 @@ namespace AppBundle\Repository;
  */
 class TVShowRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getTvShows($page, $nbPerPage)
+    {
+        $query = $this->createQueryBuilder('tv_show')
+            ->orderBy('tv_show.id', 'ASC')
+            ->getQuery()
+        ;
+
+        $query
+            ->setFirstResult(($page-1) * $nbPerPage)
+            ->setMaxResults($nbPerPage)
+        ;
+        return new Paginator($query, true);
+    }
 }

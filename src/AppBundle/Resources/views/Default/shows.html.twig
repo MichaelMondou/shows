@@ -4,21 +4,33 @@
 
 {% block contents %}
     <section>
-    	<div class="container">
-    		<h3>Liste des séries</h3>
+        <div class="container">
+            <h3>Liste des séries</h3>
+
             <div class="row">
-    		{% for show in shows %}
-            <a href="{{ path('show', {id: show.id}) }}" class="tvshow col-sm-6">
-                <img class="pull-left" src="{{ web_image('uploads/'~show.image).resize(100, 100).png }}" />
-                <h4>{{ show.name }} ({{ show.seasons|length }} saisons)</h4>
-                {{ show.synopsis }}
-            </a>
-    		{% endfor %}
+                {% for show in shows %}
+                    <a href="{{ path('show', {id: show.id}) }}" class="tvshow col-sm-6">
+                        <img class="pull-left" src="{{ web_image('uploads/'~show.image).resize(100, 100).png }}"/>
+                        <h4>{{ show.name }} ({{ show.seasons|length }} saisons)</h4>
+                        {{ show.synopsis }}
+                    </a>
+                {% endfor %}
             </div>
 
-    		{% if app.user %}
-    			<a href="{{ path('admin_add_show') }}">Ajouter une série</a>
-    		{% endif %}
-    	</div>
+            <div class="row">
+                <ul class="pagination">
+                    {# On utilise la fonction range(a, b) qui crée un tableau de valeurs entre a et b #}
+                    {% for p in range(1, nbPages) %}
+                        <li{% if p == page %} class="active"{% endif %}>
+                            <a href="{{ path('shows', {'page': p}) }}">{{ p }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            {% if app.user %}
+                <a href="{{ path('admin_add_show') }}">Ajouter une série</a>
+            {% endif %}
+        </div>
     </section>
 {% endblock %}
