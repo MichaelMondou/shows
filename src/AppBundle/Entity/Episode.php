@@ -41,7 +41,7 @@ class Episode
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Season", inversedBy="episodes", cascade={"remove"})
+     * @ORM\ManyToOne(targetEntity="Season", inversedBy="episodes")
      */
     private $season;
 
