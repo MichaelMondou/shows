@@ -6,24 +6,43 @@
     <section>
         <div class="container">
             <h2>Calendrier</h2>
+
             <h3>Prochaines diffusions</h3>
             {% if items is defined %}
-                {% for show in items %}
-                    <div class="row">
-                        <img class="pull-left" src="{{ web_image('uploads/'~show.image).resize(100, 100).png }}"/>
-                        {{ show.name }} <br/>
-                        {% if show.seasons is defined %}
-                            {% for season in show.seasons %}
-                                Saison n°{{ season.number }} <br/>
-                                {% if season.episodes is defined %}
-                                    {% for episode in season.episodes %}
-                                        {{ episode.name }} - {{ episode.date|date('d/m/Y') }} <br/>
-                                    {% endfor %}
-                                {% endif %}<br/>
-                            {% endfor %}
-                        {% endif %}
-                    </div><br/>
-                {% endfor %}
+                <div class="row">
+                    {% for show in items %}
+                        <div class="col-sm-6" style="padding: 20px 20px;">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    {% if show.image[:5] != 'https' %} {# Pas trouvé mieux #}
+                                        <img class="pull-left"
+                                             src="{{ web_image('uploads/'~show.image).resize(300, 200).png }}"/>
+                                    {% else %}
+                                        <img class="pull-left" src="{{ image(show.image).resize(300, 200).png }}"/>
+                                    {% endif %}
+                                </div>
+                                <div class="col-sm-6">
+                                    <h4>{{ show.name }}</h4>
+                                    {% if show.seasons is defined %}
+                                        {% for season in show.seasons %}
+                                            <p>
+                                                <b>Saison n°{{ season.number }}</b><br/>
+                                                {% if season.episodes is defined %}
+                                                    Episodes :
+                                                    <ul>
+                                                        {% for episode in season.episodes %}
+                                                           <li> {{ episode.name }} - {{ episode.date|date('d/m/Y') }}</li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                {% endif %}
+                                            </p>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             {% endif %}
         </div>
     </section>
