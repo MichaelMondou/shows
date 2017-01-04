@@ -10,4 +10,18 @@ namespace AppBundle\Repository;
  */
 class EpisodeRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getEpisodesForCalendar()
+    {
+        $query = $this->createQueryBuilder('episode')
+            ->leftJoin('episode.season', 'season')
+            ->addSelect('season')
+            ->leftJoin('season.show', 'show')
+            ->addSelect('show')
+            ->where('episode.date >= CURRENT_DATE()')
+            ->orderBy('episode.date', 'ASC')
+            ->getQuery()
+        ;
+
+        return $query->getResult();
+    }
 }

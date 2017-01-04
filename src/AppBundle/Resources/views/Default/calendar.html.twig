@@ -4,8 +4,27 @@
 
 {% block contents %}
     <section>
-    	<div class="container">
-    		
-    	</div>
+        <div class="container">
+            <h2>Calendrier</h2>
+            <h3>Prochaines diffusions</h3>
+            {% if items is defined %}
+                {% for show in items %}
+                    <div class="row">
+                        <img class="pull-left" src="{{ web_image('uploads/'~show.image).resize(100, 100).png }}"/>
+                        {{ show.name }} <br/>
+                        {% if show.seasons is defined %}
+                            {% for season in show.seasons %}
+                                Saison n°{{ season.number }} <br/>
+                                {% if season.episodes is defined %}
+                                    {% for episode in season.episodes %}
+                                        {{ episode.name }} - {{ episode.date|date('d/m/Y') }} <br/>
+                                    {% endfor %}
+                                {% endif %}<br/>
+                            {% endfor %}
+                        {% endif %}
+                    </div><br/>
+                {% endfor %}
+            {% endif %}
+        </div>
     </section>
 {% endblock %}

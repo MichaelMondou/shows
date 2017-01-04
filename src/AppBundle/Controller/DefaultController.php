@@ -69,7 +69,64 @@ class DefaultController extends Controller
      */
     public function calendarAction()
     {
-        return [];
+        $em = $this->get('doctrine')->getManager();
+        $repo = $em->getRepository('AppBundle:Episode');
+
+        $results = $repo->getEpisodesForCalendar();
+
+        if (!empty($results)) {
+            $items = array();
+
+            foreach ($results as $result) {
+                $tv_show_id = $result->getSeason()->getShow()->getId();
+                $tv_show_name = $result->getSeason()->getShow()->getName();
+                $tv_show_image = $result->getSeason()->getShow()->getImage();
+                $season_id = $result->getSeason()->getId();
+                $season_number = $result->getSeason()->getNumber();
+                $episode_id = $result->getId();
+                $episode_name = $result->getName();
+                $episode_date = $result->getDate();
+
+                if (!empty($items[$tv_show_id])) {
+                    if (!empty($items[$tv_show_id]['seasons'][$season_id])) {
+                        $items[$tv_show_id]['seasons'][$season_id]['episodes'][$episode_id] = array(
+                            'name' => $episode_name,
+                            'date' => $episode_date
+                        );
+                    } else {
+                        $items[$tv_show_id]['seasons'][$season_id] = array(
+                            'number' => $season_number,
+                            'episodes' => array(
+                                $episode_id => array(
+                                    'name' => $episode_name,
+                                    'date' => $episode_date
+                                )
+                            )
+                        );
+                    }
+                } else {
+                    $items[$tv_show_id] = array(
+                        'name' => $tv_show_name,
+                        'image' => $tv_show_image,
+                        'seasons' => array(
+                            $season_id => array(
+                                'number' => $season_number,
+                                'episodes' => array(
+                                    $episode_id => array(
+                                        'name' => $episode_name,
+                                        'date' => $episode_date
+                                    )
+                                )
+                            )
+                        )
+                    );
+                }
+            }
+
+            return [
+                'items' => $items
+            ];
+        }
     }
 
     /**
