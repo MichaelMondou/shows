@@ -14,8 +14,24 @@
     			</div>
     		</form>
 
+            {% if app.session.flashBag.has('success') %}
+                <div class="alert alert-success">
+                    {% for msg in app.session.flashBag.get('success') %}
+                        {{ msg }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% if app.session.flashBag.has('error') %}
+                <div class="alert alert-error">
+                    {% for msg in app.session.flashBag.get('error') %}
+                        {{ msg }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             {% for entry in result %}
-                <a href="#" class="tvshow col-sm-6">
+                <a href="{{ path('omdb_import', {'id': entry.imdbID}) }}" class="tvshow col-sm-6">
                     {% if entry.Poster != 'N/A' %}
                         <img class="pull-left" src="{{ image(entry.Poster).resize(100, 100).png }}" />
                     {% endif %}

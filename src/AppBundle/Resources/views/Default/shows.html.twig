@@ -10,7 +10,11 @@
             <div class="row">
                 {% for show in shows %}
                     <a href="{{ path('show', {id: show.id}) }}" class="tvshow col-sm-6">
-                        <img class="pull-left" src="{{ web_image('uploads/'~show.image).resize(100, 100).png }}"/>
+                        {% if show.image[:5] != 'https' %} {# Pas trouvé mieux #}
+                            <img class="pull-left" src="{{ web_image('uploads/'~show.image).resize(100, 100).png }}"/>
+                        {% else %}
+                            <img class="pull-left" src="{{ image(show.image).resize(100, 100).png }}"/>
+                        {% endif %}
                         <h4>{{ show.name }} ({{ show.seasons|length }} saisons)</h4>
                         {{ show.synopsis }}
                     </a>

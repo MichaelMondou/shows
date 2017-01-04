@@ -6,7 +6,11 @@
     <section>
     	<div class="container">
             <div class="col-xs-2">
-                <img class="pull-left" style="width:80%;margin:15px" src="{{ web_image('uploads/'~show.image).resize(200, 300).png }}" />
+                {% if show.image[:5] != 'https' %} {# Pas trouvé mieux #}
+                    <img class="pull-left" style="width:80%;margin:15px" src="{{ web_image('uploads/'~show.image).resize(200, 300).png }}"/>
+                {% else %}
+                    <img class="pull-left" style="width:80%;margin:15px" src="{{ image(show.image).resize(200, 300).png }}"/>
+                {% endif %}
             </div>
             <div class="col-xs-10">
     		<h3>{{ show }}</h3>
