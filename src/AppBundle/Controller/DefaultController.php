@@ -91,13 +91,9 @@ class DefaultController extends Controller
 
         if (!empty($term)) {
             $em = $this->get('doctrine')->getManager();
-            $query = $em->createQuery('SELECT tv_show FROM AppBundle:TVShow tv_show
-             WHERE tv_show.name LIKE :tv_show_name OR tv_show.synopsis LIKE :tv_show_synopsis
-             ORDER BY tv_show.id ASC'
-            )->setParameter('tv_show_name', '%' . $term . '%')
-                ->setParameter('tv_show_synopsis', '%' . $term . '%');
+            $repo = $em->getRepository('AppBundle:TVShow');
 
-            $results = $query->getResult();
+            $results = $repo->getTvShowsBySearch($term);
 
             if (!empty($results)) {
                 return [
